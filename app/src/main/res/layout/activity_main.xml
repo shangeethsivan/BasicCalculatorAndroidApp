@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="io.full.calculator.MainActivity">
+
+    <fragment
+        android:id="@+id/viewPanel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:name="io.full.calculator.MainActivity$ViewPanelFragment"
+        tools:layout="@layout/fragment_view_panel" />
+
+    <fragment
+        android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:name="io.full.calculator.MainActivity$ControlPanelFragment"
+        tools:layout="@layout/fragment_control_panel" />
+</LinearLayout>
