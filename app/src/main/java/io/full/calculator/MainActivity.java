@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         init();
     }
 
-    private void init(){
+    private void init() {
 
         backLine = (TextView) findViewById(R.id.backLine);
         operatorLine = (TextView) findViewById(R.id.operator);
@@ -102,10 +102,11 @@ public class MainActivity extends AppCompatActivity {
         operatorLine.setText(operationCharacter);
         String a = mainLine.getText().toString();
 
-        Log.e("LOGGER", "operatorClicked: "+a );
+        Log.e("LOGGER", "operatorClicked: " + a);
         if (backLine.getText().length() == 0) {
             backLine.setText(mainLine.getText().toString());
             mainLine.setText(getResources().getText(R.string.default_value));
+            decimalAdded = false;
         }
         //TODO: Add zero to back stack
 
@@ -199,12 +200,50 @@ public class MainActivity extends AppCompatActivity {
                 resetCalculator();
                 break;
 
+            case R.id.operation_equalTo:
+                initiateCalculation();
+                break;
+
         }
 
     }
 
-    public static class ControlPanelFragment extends Fragment {
+    private String getOperator(operatorsEnum operatorsEnum) {
 
+        switch (operatorsEnum) {
+
+            case ADD:
+                return "+";
+
+            case SUBTRACT:
+                return "-";
+
+            case MULTIPLY:
+                return "*";
+
+            case DIVISION:
+                return "/";
+
+            case MODULO:
+                return "%";
+        }
+        return null;
+    }
+
+    private void initiateCalculation() {
+        if (mainLine.getText().toString().length() != 0 && backLine.getText().toString().length() != 0) {
+
+            double result = Calculator.calculate(backLine.getText().toString(), mainLine.getText().toString(), currentOperator);
+
+            operatorLine.setText(getOperator(currentOperator) + mainLine.getText().toString());
+
+            mainLine.setText(String.valueOf(result));
+
+        }
+    }
+
+
+    public static class ControlPanelFragment extends Fragment {
 
         public ControlPanelFragment() {
             // Required empty public constructor

@@ -24,8 +24,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="processClickEvent"
+            android:background="@drawable/button_shape"
             android:text="AC"
-            android:textColor="@android:color/holo_blue_dark"
+            android:textColor="@color/colorPrimary"
             android:textSize="34sp" />
 
 
@@ -38,6 +39,7 @@
             android:id="@+id/operation_modulo"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@drawable/button_shape"
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="processClickEvent"
@@ -55,6 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/button_shape"
             android:gravity="center"
             android:onClick="processClickEvent"
             android:text="/"
@@ -70,6 +73,7 @@
             android:id="@+id/operation_delete"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@drawable/button_shape"
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="processClickEvent"
@@ -94,6 +98,7 @@
             android:id="@+id/number_7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@drawable/button_shape"
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="processClickEvent"
@@ -112,6 +117,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:background="@drawable/button_shape"
             android:onClick="processClickEvent"
             android:text="8"
             android:textSize="34sp" />
@@ -126,6 +132,7 @@
             android:id="@+id/number_9"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@drawable/button_shape"
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="processClickEvent"
@@ -142,6 +149,7 @@
             android:id="@+id/operation_multiply"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@drawable/button_shape"
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="processClickEvent"
@@ -166,6 +174,7 @@
         <TextView
             android:id="@+id/number_4"
             android:layout_width="0dp"
+            android:background="@drawable/button_shape"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
@@ -182,7 +191,7 @@
         <TextView
             android:id="@+id/number_5"
             android:layout_width="0dp"
-
+            android:background="@drawable/button_shape"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
@@ -199,6 +208,7 @@
         <TextView
             android:id="@+id/number_6"
             android:layout_width="0dp"
+            android:background="@drawable/button_shape"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
@@ -218,6 +228,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:background="@drawable/button_shape"
             android:onClick="processClickEvent"
             android:text="-"
             android:textSize="34sp" />
@@ -243,6 +254,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:background="@drawable/button_shape"
             android:onClick="processClickEvent"
             android:text="1"
             android:textSize="34sp" />
@@ -258,6 +270,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/button_shape"
             android:gravity="center"
             android:onClick="processClickEvent"
             android:text="2"
@@ -274,6 +287,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/button_shape"
             android:gravity="center"
             android:onClick="processClickEvent"
             android:text="3"
@@ -292,6 +306,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="processClickEvent"
+            android:background="@drawable/button_shape"
             android:text="+"
             android:textSize="34sp" />
 
@@ -333,6 +348,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="processClickEvent"
+            android:background="@drawable/button_shape"
             android:text="0"
             android:textSize="34sp" />
 
@@ -347,6 +363,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/button_shape"
             android:gravity="center"
             android:onClick="processClickEvent"
             android:text="."
@@ -363,7 +380,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@android:color/holo_blue_dark"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:onClick="processClickEvent"
             android:text="="
