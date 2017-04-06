@@ -26,10 +26,10 @@ public class ExampleUnitTest {
     @Parameters
     public static List<double[]> testConditions() {
         double expectedOutputs[][] = {
-                {-1.0, Calculator.calculate("1", "-2", MainActivity.operatorsEnum.ADD)},
-                {5.0, Calculator.calculate("2", "3", MainActivity.operatorsEnum.ADD)},
-                {2.0, Calculator.calculate("1", "1", MainActivity.operatorsEnum.ADD)},
-                {11.0, Calculator.calculate("5", "6", MainActivity.operatorsEnum.ADD)}
+                {-1.0, Calculator.calculate("1", "-2", MainActivity.OperatorsEnum.ADD)},
+                {5.0, Calculator.calculate("2", "3", MainActivity.OperatorsEnum.ADD)},
+                {2.0, Calculator.calculate("1", "1", MainActivity.OperatorsEnum.ADD)},
+                {11.0, Calculator.calculate("5", "6", MainActivity.OperatorsEnum.ADD)}
         };
         return Arrays.asList(expectedOutputs);
     }

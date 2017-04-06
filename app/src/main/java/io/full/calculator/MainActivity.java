@@ -3,7 +3,6 @@ package io.full.calculator;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +10,15 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    enum operatorsEnum {ADD, SUBTRACT, MULTIPLY, DIVISION, MODULO}
+    enum OperatorsEnum {ADD, SUBTRACT, MULTIPLY, DIVISION, MODULO}
 
-    TextView backLine;
-    TextView operatorLine;
-    TextView mainLine;
+    TextView mOperand1TextView;
 
-    operatorsEnum currentOperator;
+    TextView mOperatorTextView;
+
+    TextView mOperator2TextView;
+
+    OperatorsEnum currentOperator;
 
     boolean operationPerformed = false;
     boolean decimalAdded = false;
@@ -33,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
 
-        backLine = (TextView) findViewById(R.id.backLine);
-        operatorLine = (TextView) findViewById(R.id.operator);
-        mainLine = (TextView) findViewById(R.id.mainLine);
+        mOperand1TextView = (TextView) findViewById(R.id.backLine);
+        mOperatorTextView = (TextView) findViewById(R.id.operator);
+        mOperator2TextView = (TextView) findViewById(R.id.mainLine);
 
     }
 
@@ -44,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
         int id = view.getId();
 
-        if (mainLine.getText().equals("0") && mainLine.getText().length() == 1 && id != R.id.decimalPoint && id != R.id.operation_equalTo)
-            mainLine.setText("");
+        if (mOperator2TextView.getText().equals("0") && mOperator2TextView.getText().length() == 1 && id != R.id.decimalPoint && id != R.id.operation_equalTo)
+            mOperator2TextView.setText("");
 
         switch (id) {
 
             case R.id.number_0:
-                if (!mainLine.getText().equals("0"))
+                if (!mOperator2TextView.getText().equals("0"))
                     addValueToMainLine("0");
                 break;
 
@@ -91,31 +92,29 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.decimalPoint:
-                if (!decimalAdded) {
+                if(!mOperator2TextView.getText().toString().contains(".")){
                     addValueToMainLine(".");
-                    decimalAdded = true;
                 }
-
                 break;
 
             case R.id.operation_add:
-                operatorClicked(operatorsEnum.ADD);
+                operatorClicked(OperatorsEnum.ADD);
                 break;
 
             case R.id.operation_subtract:
-                operatorClicked(operatorsEnum.SUBTRACT);
+                operatorClicked(OperatorsEnum.SUBTRACT);
                 break;
 
             case R.id.operation_multiply:
-                operatorClicked(operatorsEnum.MULTIPLY);
+                operatorClicked(OperatorsEnum.MULTIPLY);
                 break;
 
             case R.id.operation_division:
-                operatorClicked(operatorsEnum.DIVISION);
+                operatorClicked(OperatorsEnum.DIVISION);
                 break;
 
             case R.id.operation_modulo:
-                operatorClicked(operatorsEnum.MODULO);
+                operatorClicked(OperatorsEnum.MODULO);
                 break;
 
             case R.id.operation_delete:
@@ -134,17 +133,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void addValueToMainLine(String number) {
+    private void addValueToMainLine(String pNumber) {
 
-        mainLine.setText((new StringBuilder(mainLine.getText()).append(number)).toString());
+        mOperator2TextView.setText((new StringBuilder(mOperator2TextView.getText()).append(pNumber)).toString());
 
     }
 
     private void resetCalculator() {
 
-        backLine.setText(" ");
-        operatorLine.setText(" ");
-        mainLine.setText(getResources().getText(R.string.default_value));
+        mOperand1TextView.setText(" ");
+        mOperatorTextView.setText(" ");
+        mOperator2TextView.setText(getResources().getText(R.string.default_value));
 
         decimalAdded = false;
         operationPerformed = false;
@@ -153,71 +152,74 @@ public class MainActivity extends AppCompatActivity {
 
     private void deleteClicked() {
 
-        if (mainLine.length() != 0) {
+        if (mOperator2TextView.length() != 0) {
 
-            if (mainLine.getText().toString().substring(mainLine.length() - 1).equals(".")) {
+            if (mOperator2TextView.getText().toString().substring(mOperator2TextView.length() - 1).equals(".")) {
                 decimalAdded = false;
             }
 
-            mainLine.setText(mainLine.getText().toString().substring(0, mainLine.length() - 1));
+            mOperator2TextView.setText(mOperator2TextView.getText().toString().substring(0, mOperator2TextView.length() - 1));
         }
 
-        if (mainLine.getText().length() == 0) {
-            mainLine.setText(getResources().getText(R.string.default_value));
+        if (mOperator2TextView.getText().length() == 0) {
+            mOperator2TextView.setText(getResources().getText(R.string.default_value));
         }
 
 
     }
 
-    private void operatorClicked(operatorsEnum operator) {
+    private void operatorClicked(OperatorsEnum operator) {
 
-        currentOperator = operator;
 
         if (operationPerformed) {
 
-            backLine.setText(mainLine.getText().toString());
-            operatorLine.setText(getOperator(operator));
-            mainLine.setText(getResources().getText(R.string.default_value));
+            mOperand1TextView.setText(mOperator2TextView.getText().toString());
+            mOperatorTextView.setText(getOperator(operator));
+            mOperator2TextView.setText(getResources().getText(R.string.default_value));
             operationPerformed = false;
 
-        } else if (mainLine.getText().toString().equals("0") || mainLine.getText().toString().equals("") &&  backLine.getText().toString().equals("") || backLine.getText().toString().equals(" ")) {
-
-            backLine.setText("0");
-            operatorLine.setText(getOperator(operator));
-            mainLine.setText(getResources().getText(R.string.default_value));
-            operationPerformed = false;
-
-        } else {
-
-
-//            if (mainLine.getText().toString().length() == 0 && backLine.getText().toString().equals(" ") ) {
+//        } else if (mOperator2TextView.getText().toString().equals("0") || mOperator2TextView.getText().toString().equals("") &&  mOperand1TextView.getText().toString().equals("") || mOperand1TextView.getText().toString().equals(" ")) {
 //
-//                if(operator == operatorsEnum.ADD || operator == operatorsEnum.SUBTRACT)
+//            mOperand1TextView.setText("0");
+//            mOperatorTextView.setText(getOperator(operator));
+//            mOperator2TextView.setText(getResources().getText(R.string.default_value));
+//            operationPerformed = false;
+
+        }
+        else if(mOperator2TextView.getText().toString().equals("") && "+-".contains(getOperator(operator)) ){
+            addValueToMainLine(getOperator(operator));
+        }
+            else{
+
+//            if (mOperator2TextView.getText().toString().length() == 0 && mOperand1TextView.getText().toString().equals(" ") ) {
+//
+//                if(operator == OperatorsEnum.ADD || operator == OperatorsEnum.SUBTRACT)
 //                    addValueToMainLine(getOperator(operator));
 //
-//            } else if(mainLine.getText().toString().equals("+") || mainLine.getText().toString().equals("-")){
-//                backLine.setText("0");
-//                operatorLine.setText(getOperator(operator));
-//                mainLine.setText(getResources().getText(R.string.default_value));
+//            } else if(mOperator2TextView.getText().toString().equals("+") || mOperator2TextView.getText().toString().equals("-")){
+//                mOperand1TextView.setText("0");
+//                mOperatorTextView.setText(getOperator(operator));
+//                mOperator2TextView.setText(getResources().getText(R.string.default_value));
 //                operationPerformed = false;
 //            }
 //            else {
 
-            operatorLine.setText(getOperator(operator));
+            mOperatorTextView.setText(getOperator(operator));
 
-            if (backLine.getText().length() == 0 || backLine.getText().toString().equals(" ")) {
-                backLine.setText(mainLine.getText().toString());
-                mainLine.setText(getResources().getText(R.string.default_value));
+            if (mOperand1TextView.getText().length() == 0 || mOperand1TextView.getText().toString().equals(" ")) {
+                mOperand1TextView.setText(mOperator2TextView.getText().toString());
+                mOperator2TextView.setText(getResources().getText(R.string.default_value));
                 decimalAdded = false;
             }
 
+            currentOperator = operator;
             //TODO: Add zero to back stack
         }
     }
 //    }
 
 
-    private String getOperator(operatorsEnum operatorsEnum) {
+    private String getOperator(OperatorsEnum operatorsEnum) {
 
         switch (operatorsEnum) {
 
@@ -241,21 +243,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void initiateCalculation() {
 
-        if (mainLine.getText().toString().length() != 0 && backLine.getText().toString().length() != 0 && !backLine.getText().toString().equals(" ")) {
+        if(!operationPerformed){
 
-            double result = Calculator.calculate(backLine.getText().toString(), mainLine.getText().toString(), currentOperator);
+        if (mOperator2TextView.getText().toString().length() != 0 && mOperand1TextView.getText().toString().length() != 0 && !mOperand1TextView.getText().toString().equals(" ")) {
 
-            operatorLine.setText((new StringBuilder(getOperator(currentOperator)).append(mainLine.getText().toString())).toString());
+            double result = Calculator.calculate(mOperand1TextView.getText().toString(), mOperator2TextView.getText().toString(), currentOperator);
+
+            mOperatorTextView.setText((new StringBuilder(getOperator(currentOperator)).append(mOperator2TextView.getText().toString())).toString());
 
             if (result % 1 == 0)
-                mainLine.setText(String.valueOf((int) result));
+                mOperator2TextView.setText(String.valueOf((int) result));
             else {
-                mainLine.setText(String.valueOf(result));
+                mOperator2TextView.setText(String.valueOf(result));
                 decimalAdded = true;
             }
 
-
             operationPerformed = true;
+            }
         }
     }
 

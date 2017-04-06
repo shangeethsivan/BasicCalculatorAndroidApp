@@ -6,7 +6,7 @@ package io.full.calculator;
 
 public class Calculator {
 
-    public static double calculate(String operand1, String operand2, MainActivity.operatorsEnum operator) {
+    public static double calculate(String operand1, String operand2, MainActivity.OperatorsEnum operator) {
 
         double value1 = convertToDouble(operand1);
 
