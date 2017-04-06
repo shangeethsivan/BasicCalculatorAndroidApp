@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     operatorsEnum currentOperator;
 
+    boolean operationPerformed = false;
     boolean decimalAdded = false;
 
     @Override
@@ -38,19 +39,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void addNumberToMainLine(String number) {
+    public void addValueToMainLine(String number) {
 
-        mainLine.setText(mainLine.getText() + number);
+        mainLine.setText((new StringBuilder(mainLine.getText()).append(number)).toString());
 
     }
 
     public void resetCalculator() {
 
-        backLine.setText("");
-        operatorLine.setText("");
+        backLine.setText(" ");
+        operatorLine.setText(" ");
         mainLine.setText(getResources().getText(R.string.default_value));
 
         decimalAdded = false;
+        operationPerformed = false;
 
     }
 
@@ -72,44 +74,58 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void operatorClicked(operatorsEnum operator) {
+    private void operatorClicked(operatorsEnum operator) {
 
-        String operationCharacter = "";
+        if (operationPerformed) {
 
-        switch (operator) {
-            case ADD:
-                operationCharacter = "+";
-                currentOperator = operatorsEnum.ADD;
-                break;
-            case SUBTRACT:
-                operationCharacter = "-";
-                currentOperator = operatorsEnum.SUBTRACT;
-                break;
-            case MULTIPLY:
-                operationCharacter = "*";
-                currentOperator = operatorsEnum.MULTIPLY;
-                break;
-            case DIVISION:
-                operationCharacter = "/";
-                currentOperator = operatorsEnum.DIVISION;
-                break;
-            case MODULO:
-                operationCharacter = "%";
-                currentOperator = operatorsEnum.MODULO;
-                break;
-        }
-
-        operatorLine.setText(operationCharacter);
-        String a = mainLine.getText().toString();
-
-        Log.e("LOGGER", "operatorClicked: " + a);
-        if (backLine.getText().length() == 0) {
             backLine.setText(mainLine.getText().toString());
+            operatorLine.setText(getOperator(operator));
             mainLine.setText(getResources().getText(R.string.default_value));
-            decimalAdded = false;
-        }
-        //TODO: Add zero to back stack
+            operationPerformed = false;
 
+        } else {
+
+            if (mainLine.getText().toString().length() == 0) {
+
+                if(operator == operatorsEnum.ADD || operator == operatorsEnum.SUBTRACT)
+                    addValueToMainLine(getOperator(operator));
+
+            } else {
+                String operationCharacter = "";
+
+                switch (operator) {
+                    case ADD:
+                        operationCharacter = "+";
+                        currentOperator = operatorsEnum.ADD;
+                        break;
+                    case SUBTRACT:
+                        operationCharacter = "-";
+                        currentOperator = operatorsEnum.SUBTRACT;
+                        break;
+                    case MULTIPLY:
+                        operationCharacter = "*";
+                        currentOperator = operatorsEnum.MULTIPLY;
+                        break;
+                    case DIVISION:
+                        operationCharacter = "/";
+                        currentOperator = operatorsEnum.DIVISION;
+                        break;
+                    case MODULO:
+                        operationCharacter = "%";
+                        currentOperator = operatorsEnum.MODULO;
+                        break;
+                }
+
+                operatorLine.setText(operationCharacter);
+
+                if (backLine.getText().length() == 0 || backLine.getText().toString().equals(" ")) {
+                    backLine.setText(mainLine.getText().toString());
+                    mainLine.setText(getResources().getText(R.string.default_value));
+                    decimalAdded = false;
+                }
+                //TODO: Add zero to back stack
+            }
+        }
     }
 
 
@@ -117,56 +133,56 @@ public class MainActivity extends AppCompatActivity {
 
         int id = view.getId();
 
-        if (mainLine.getText().equals("0") && mainLine.getText().length() == 1 && id != R.id.decimalPoint)
+        if (mainLine.getText().equals("0") && mainLine.getText().length() == 1 && id != R.id.decimalPoint && id != R.id.operation_equalTo)
             mainLine.setText("");
 
         switch (id) {
 
             case R.id.number_0:
                 if (mainLine.getText().length() != 1 && !mainLine.getText().equals("0"))
-                    addNumberToMainLine("0");
+                    addValueToMainLine("0");
                 break;
 
             case R.id.number_1:
-                addNumberToMainLine("1");
+                addValueToMainLine("1");
                 break;
 
             case R.id.number_2:
-                addNumberToMainLine("2");
+                addValueToMainLine("2");
                 break;
 
             case R.id.number_3:
-                addNumberToMainLine("3");
+                addValueToMainLine("3");
                 break;
 
             case R.id.number_4:
-                addNumberToMainLine("4");
+                addValueToMainLine("4");
                 break;
 
             case R.id.number_5:
-                addNumberToMainLine("5");
+                addValueToMainLine("5");
                 break;
 
             case R.id.number_6:
-                addNumberToMainLine("6");
+                addValueToMainLine("6");
                 break;
 
             case R.id.number_7:
-                addNumberToMainLine("7");
+                addValueToMainLine("7");
                 break;
 
             case R.id.number_8:
-                addNumberToMainLine("8");
+                addValueToMainLine("8");
                 break;
 
             case R.id.number_9:
-                addNumberToMainLine("9");
+                addValueToMainLine("9");
                 break;
 
             case R.id.decimalPoint:
 
                 if (!decimalAdded) {
-                    addNumberToMainLine(".");
+                    addValueToMainLine(".");
                     decimalAdded = true;
                 }
 
@@ -231,14 +247,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initiateCalculation() {
-        if (mainLine.getText().toString().length() != 0 && backLine.getText().toString().length() != 0) {
+
+        if (mainLine.getText().toString().length() != 0 && backLine.getText().toString().length() != 0 && !backLine.getText().toString().equals(" ")) {
 
             double result = Calculator.calculate(backLine.getText().toString(), mainLine.getText().toString(), currentOperator);
 
             operatorLine.setText(getOperator(currentOperator) + mainLine.getText().toString());
 
-            mainLine.setText(String.valueOf(result));
+            if (result % 1 == 0)
+                mainLine.setText(String.valueOf((int) result));
+            else {
+                mainLine.setText(String.valueOf(result));
+                decimalAdded = true;
+            }
 
+
+            operationPerformed = true;
         }
     }
 
