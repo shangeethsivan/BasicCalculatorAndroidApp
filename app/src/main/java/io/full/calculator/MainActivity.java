@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 
-            if (mainLine.getText().toString().length() == 0) {
+            if (mainLine.getText().toString().length() == 0 && backLine.getText().toString().equals(" ")) {
 
                 if(operator == operatorsEnum.ADD || operator == operatorsEnum.SUBTRACT)
                     addValueToMainLine(getOperator(operator));
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
 
             double result = Calculator.calculate(backLine.getText().toString(), mainLine.getText().toString(), currentOperator);
 
-            operatorLine.setText(getOperator(currentOperator) + mainLine.getText().toString());
+            operatorLine.setText((new StringBuilder(getOperator(currentOperator)).append( mainLine.getText().toString())).toString());
 
             if (result % 1 == 0)
                 mainLine.setText(String.valueOf((int) result));
