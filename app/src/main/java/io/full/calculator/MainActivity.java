@@ -39,95 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void addValueToMainLine(String number) {
-
-        mainLine.setText((new StringBuilder(mainLine.getText()).append(number)).toString());
-
-    }
-
-    public void resetCalculator() {
-
-        backLine.setText(" ");
-        operatorLine.setText(" ");
-        mainLine.setText(getResources().getText(R.string.default_value));
-
-        decimalAdded = false;
-        operationPerformed = false;
-
-    }
-
-    public void deleteClicked() {
-
-        if (mainLine.length() != 0) {
-
-            if (mainLine.getText().toString().substring(mainLine.length() - 1).equals(".")) {
-                decimalAdded = false;
-            }
-
-            mainLine.setText(mainLine.getText().toString().substring(0, mainLine.length() - 1));
-        }
-
-        if (mainLine.getText().length() == 0) {
-            mainLine.setText(getResources().getText(R.string.default_value));
-        }
-
-
-    }
-
-    private void operatorClicked(operatorsEnum operator) {
-
-        if (operationPerformed) {
-
-            backLine.setText(mainLine.getText().toString());
-            operatorLine.setText(getOperator(operator));
-            mainLine.setText(getResources().getText(R.string.default_value));
-            operationPerformed = false;
-
-        } else {
-
-            if (mainLine.getText().toString().length() == 0 && backLine.getText().toString().equals(" ")) {
-
-                if(operator == operatorsEnum.ADD || operator == operatorsEnum.SUBTRACT)
-                    addValueToMainLine(getOperator(operator));
-
-            } else {
-                String operationCharacter = "";
-
-                switch (operator) {
-                    case ADD:
-                        operationCharacter = "+";
-                        currentOperator = operatorsEnum.ADD;
-                        break;
-                    case SUBTRACT:
-                        operationCharacter = "-";
-                        currentOperator = operatorsEnum.SUBTRACT;
-                        break;
-                    case MULTIPLY:
-                        operationCharacter = "*";
-                        currentOperator = operatorsEnum.MULTIPLY;
-                        break;
-                    case DIVISION:
-                        operationCharacter = "/";
-                        currentOperator = operatorsEnum.DIVISION;
-                        break;
-                    case MODULO:
-                        operationCharacter = "%";
-                        currentOperator = operatorsEnum.MODULO;
-                        break;
-                }
-
-                operatorLine.setText(operationCharacter);
-
-                if (backLine.getText().length() == 0 || backLine.getText().toString().equals(" ")) {
-                    backLine.setText(mainLine.getText().toString());
-                    mainLine.setText(getResources().getText(R.string.default_value));
-                    decimalAdded = false;
-                }
-                //TODO: Add zero to back stack
-            }
-        }
-    }
-
 
     public void processClickEvent(View view) {
 
@@ -139,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
 
             case R.id.number_0:
-                if (mainLine.getText().length() != 1 && !mainLine.getText().equals("0"))
+                if (!mainLine.getText().equals("0"))
                     addValueToMainLine("0");
                 break;
 
@@ -180,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.decimalPoint:
-
                 if (!decimalAdded) {
                     addValueToMainLine(".");
                     decimalAdded = true;
@@ -224,6 +134,89 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void addValueToMainLine(String number) {
+
+        mainLine.setText((new StringBuilder(mainLine.getText()).append(number)).toString());
+
+    }
+
+    private void resetCalculator() {
+
+        backLine.setText(" ");
+        operatorLine.setText(" ");
+        mainLine.setText(getResources().getText(R.string.default_value));
+
+        decimalAdded = false;
+        operationPerformed = false;
+
+    }
+
+    private void deleteClicked() {
+
+        if (mainLine.length() != 0) {
+
+            if (mainLine.getText().toString().substring(mainLine.length() - 1).equals(".")) {
+                decimalAdded = false;
+            }
+
+            mainLine.setText(mainLine.getText().toString().substring(0, mainLine.length() - 1));
+        }
+
+        if (mainLine.getText().length() == 0) {
+            mainLine.setText(getResources().getText(R.string.default_value));
+        }
+
+
+    }
+
+    private void operatorClicked(operatorsEnum operator) {
+
+        currentOperator = operator;
+
+        if (operationPerformed) {
+
+            backLine.setText(mainLine.getText().toString());
+            operatorLine.setText(getOperator(operator));
+            mainLine.setText(getResources().getText(R.string.default_value));
+            operationPerformed = false;
+
+        } else if (mainLine.getText().toString().equals("0") || mainLine.getText().toString().equals("") &&  backLine.getText().toString().equals("") || backLine.getText().toString().equals(" ")) {
+
+            backLine.setText("0");
+            operatorLine.setText(getOperator(operator));
+            mainLine.setText(getResources().getText(R.string.default_value));
+            operationPerformed = false;
+
+        } else {
+
+
+//            if (mainLine.getText().toString().length() == 0 && backLine.getText().toString().equals(" ") ) {
+//
+//                if(operator == operatorsEnum.ADD || operator == operatorsEnum.SUBTRACT)
+//                    addValueToMainLine(getOperator(operator));
+//
+//            } else if(mainLine.getText().toString().equals("+") || mainLine.getText().toString().equals("-")){
+//                backLine.setText("0");
+//                operatorLine.setText(getOperator(operator));
+//                mainLine.setText(getResources().getText(R.string.default_value));
+//                operationPerformed = false;
+//            }
+//            else {
+
+            operatorLine.setText(getOperator(operator));
+
+            if (backLine.getText().length() == 0 || backLine.getText().toString().equals(" ")) {
+                backLine.setText(mainLine.getText().toString());
+                mainLine.setText(getResources().getText(R.string.default_value));
+                decimalAdded = false;
+            }
+
+            //TODO: Add zero to back stack
+        }
+    }
+//    }
+
+
     private String getOperator(operatorsEnum operatorsEnum) {
 
         switch (operatorsEnum) {
@@ -252,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
 
             double result = Calculator.calculate(backLine.getText().toString(), mainLine.getText().toString(), currentOperator);
 
-            operatorLine.setText((new StringBuilder(getOperator(currentOperator)).append( mainLine.getText().toString())).toString());
+            operatorLine.setText((new StringBuilder(getOperator(currentOperator)).append(mainLine.getText().toString())).toString());
 
             if (result % 1 == 0)
                 mainLine.setText(String.valueOf((int) result));
