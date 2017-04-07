@@ -1,4 +1,4 @@
-package io.full.calculator;
+package io.full.calculator.ui;
 
 
 import android.os.Bundle;
@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
+import io.full.calculator.R;
+import io.full.calculator.util.Calculator;
+import io.full.calculator.util.Util;
 
 
 public class ViewFragment extends Fragment {
@@ -24,6 +26,8 @@ public class ViewFragment extends Fragment {
     double mResult;
 
     boolean mEqualToPressed = false;
+
+    private Util mUtilObject;
 
     MainActivity.OperatorsEnum mCurrentOperator;
 
@@ -48,6 +52,8 @@ public class ViewFragment extends Fragment {
 
     public void init(View pView) {
 
+        mUtilObject = new Util();
+
         mOperand1TV = (TextView) pView.findViewById(R.id.operand1Line);
 
         mOperand2TV = (TextView) pView.findViewById(R.id.operand2Line);
@@ -71,8 +77,8 @@ public class ViewFragment extends Fragment {
 
         if (getOperand2Value().equals(""))
             mOperand2TV.setText(pValue);
-        else{
-            if(!getOperand2Value().equals("0"))
+        else {
+            if (!getOperand2Value().equals("0"))
                 mOperand2TV.setText((new StringBuilder(getOperand2Value()).append(pValue)).toString());
             else
                 mOperand2TV.setText(pValue);
@@ -92,23 +98,6 @@ public class ViewFragment extends Fragment {
             addValueToOperand2(".");
 
     }
-
-    private String getDoubleValue(String pStringValue) {
-
-        Double lDoubleValue = Double.valueOf(pStringValue);
-
-        if (lDoubleValue % 1 == 0) {
-
-            DecimalFormat lDecFormat = new DecimalFormat("###.#");
-            return lDecFormat.format(lDoubleValue);
-
-        } else
-        {
-            DecimalFormat lDecFormat = new DecimalFormat("###.##########");
-            return lDecFormat.format(lDoubleValue);
-        }
-    }
-
 
     public String getOperand1Value() {
         return mOperand1TV.getText().toString();
@@ -144,23 +133,22 @@ public class ViewFragment extends Fragment {
 
     public void operatorClicked(MainActivity.OperatorsEnum pOperator) {
 
-        if(pOperator == MainActivity.OperatorsEnum.SUBTRACT && getOperand2Value().equals("")){
+        if (pOperator == MainActivity.OperatorsEnum.SUBTRACT && getOperand1Value().equals("") && getOperand2Value().equals("")) {
 
             mOperand1TV.setText("0");
-            mOperatorTV.setText(getOperator(pOperator));
+            mOperatorTV.setText(mUtilObject.getOperatorSymbolAsString(pOperator));
             mOperand2TV.setText("");
             mCurrentOperator = pOperator;
 
-        }
-        if (!getOperand2Value().equals("")) {
+        } else if (!getOperand2Value().equals("")) {
             if (mEqualToPressed) {
 
                 resetCalculator();
 
                 mOperand1 = mResult;
-                mOperatorTV.setText(getOperator(pOperator));
+                mOperatorTV.setText(mUtilObject.getOperatorSymbolAsString(pOperator));
                 mCurrentOperator = pOperator;
-                mOperand1TV.setText(getDoubleValue(String.valueOf(mResult)));
+                mOperand1TV.setText(mUtilObject.formatDoubleValue(String.valueOf(mResult)));
 
                 mEqualToPressed = false;
 
@@ -180,15 +168,19 @@ public class ViewFragment extends Fragment {
                 mCurrentOperator = pOperator;
 
                 if (getOperand1Value().equals("")) {
-                    mOperand1TV.setText(getDoubleValue(String.valueOf(mOperand2)));
+                    mOperand1TV.setText(mUtilObject.formatDoubleValue(String.valueOf(mOperand2)));
 
                 } else {
-                    mOperand1TV.setText(getDoubleValue(String.valueOf(mResult)));
+                    mOperand1TV.setText(mUtilObject.formatDoubleValue(String.valueOf(mResult)));
                 }
 
-                mOperatorTV.setText(getOperator(pOperator));
+                mOperatorTV.setText(mUtilObject.getOperatorSymbolAsString(pOperator));
                 mOperand2TV.setText(getResources().getText(R.string.default_value));
             }
+        } else if (!getOperand1Value().equals((""))) {
+
+            mCurrentOperator = pOperator;
+            mOperatorTV.setText(mUtilObject.getOperatorSymbolAsString(pOperator));
         }
     }
 
@@ -202,12 +194,17 @@ public class ViewFragment extends Fragment {
                 if (getOperand1Value().length() != 0)
                     mOperand1 = Double.valueOf(getOperand1Value());
 
-                mOperand2 = Double.valueOf(getOperand2Value());
+                if (!getOperand2Value().equals(""))
+                    mOperand2 = Double.valueOf(getOperand2Value());
+                else
+                    mOperand2 = 0;
 
                 mResult = Calculator.calculate(mOperand1, mOperand2, mCurrentOperator);
 
-                mOperatorTV.setText(getOperator(mCurrentOperator) + getOperand2Value());
-                mOperand2TV.setText(getDoubleValue(String.valueOf(mResult)));
+                mOperatorTV.setText((new StringBuilder(mUtilObject.getOperatorSymbolAsString(mCurrentOperator))
+                        .append(mUtilObject.formatDoubleValue(String.valueOf(mOperand2)))).toString());
+
+                mOperand2TV.setText(mUtilObject.formatDoubleValue(String.valueOf(mResult)));
 
                 mEqualToPressed = true;
                 mCurrentOperator = null;
@@ -216,25 +213,4 @@ public class ViewFragment extends Fragment {
     }
 
 
-    private String getOperator(MainActivity.OperatorsEnum operatorsEnum) {
-
-        switch (operatorsEnum) {
-
-            case ADD:
-                return "+";
-
-            case SUBTRACT:
-                return "-";
-
-            case MULTIPLY:
-                return "*";
-
-            case DIVISION:
-                return "/";
-
-            case MODULO:
-                return "%";
-        }
-        return null;
-    }
 }

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="bottom"
-    tools:context="io.full.calculator.MainActivity">
+    tools:context="io.full.calculator.ui.MainActivity">
 
     <TextView
         android:id="@+id/operand1Line"

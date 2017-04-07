@@ -1,4 +1,4 @@
-package io.full.calculator;
+package io.full.calculator.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import io.full.calculator.R;
 
 /**
  * Created by user on 06/04/17.
@@ -17,7 +19,7 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     OnButtonClickListener mCallback;
 
 
-    public interface OnButtonClickListener {
+    interface OnButtonClickListener {
         void onButtonClicked(int id);
     }
 

@@ -1,16 +1,17 @@
-package io.full.calculator;
+package io.full.calculator.ui;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+
+import io.full.calculator.R;
 
 
 public class MainActivity extends AppCompatActivity implements ControlFragment.OnButtonClickListener {
 
 
-    enum OperatorsEnum {ADD, SUBTRACT, MULTIPLY, DIVISION, MODULO}
+    public enum OperatorsEnum {ADD, SUBTRACT, MULTIPLY, DIVISION, MODULO}
 
     private ViewFragment mViewFragment;
     private ControlFragment mControlFragment;

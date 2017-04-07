@@ -10,6 +10,9 @@ import org.junit.runners.Parameterized.Parameters;
 import java.util.Arrays;
 import java.util.List;
 
+import io.full.calculator.ui.MainActivity;
+import io.full.calculator.util.Calculator;
+
 import static org.junit.Assert.*;
 
 /**
@@ -25,12 +28,14 @@ public class ExampleUnitTest {
 
     @Parameters
     public static List<double[]> testConditions() {
+
         double expectedOutputs[][] = {
-                {-1.0, Calculator.calculate("1", "-2", MainActivity.OperatorsEnum.ADD)},
-                {5.0, Calculator.calculate("2", "3", MainActivity.OperatorsEnum.ADD)},
-                {2.0, Calculator.calculate("1", "1", MainActivity.OperatorsEnum.ADD)},
-                {11.0, Calculator.calculate("5", "6", MainActivity.OperatorsEnum.ADD)}
+                {-1.0, Calculator.calculate(1, -2, MainActivity.OperatorsEnum.ADD)},
+                {5.0, Calculator.calculate(2, 3, MainActivity.OperatorsEnum.ADD)},
+                {2.0, Calculator.calculate(1, 1, MainActivity.OperatorsEnum.ADD)},
+                {11.0, Calculator.calculate(5, 6, MainActivity.OperatorsEnum.ADD)}
         };
+
         return Arrays.asList(expectedOutputs);
     }
 
@@ -42,7 +47,7 @@ public class ExampleUnitTest {
 
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(d1, d2, 0.01);
+        assertEquals(d1, d2,0.01);
     }
 
 }

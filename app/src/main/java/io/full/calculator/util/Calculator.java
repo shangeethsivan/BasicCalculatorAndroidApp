@@ -1,4 +1,6 @@
-package io.full.calculator;
+package io.full.calculator.util;
+
+import io.full.calculator.ui.MainActivity;
 
 /**
  * Created by user on 06/04/17.

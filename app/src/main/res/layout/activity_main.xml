@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="io.full.calculator.MainActivity">
+    tools:context="io.full.calculator.ui.MainActivity">
 <!--
     <fragment
         android:id="@+id/view_panel_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:name="io.full.calculator.ViewFragment"
+        android:name="io.full.calculator.ui.ViewFragment"
         tools:layout="@layout/fragment_view_panel" />
 
     <fragment
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:name="io.full.calculator.ControlFragment"
+        android:name="io.full.calculator.ui.ControlFragment"
         tools:layout="@layout/fragment_control_panel" />-->
 
     <FrameLayout
