@@ -1,22 +1,20 @@
 package io.full.calculator;
 
-import android.support.v4.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.util.Log;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements ControlFragment.OnButtonClickListener {
+
 
     enum OperatorsEnum {ADD, SUBTRACT, MULTIPLY, DIVISION, MODULO}
 
-    TextView mOperand1TextView;
+    private ViewFragment mViewFragment;
+    private ControlFragment mControlFragment;
 
-    TextView mOperatorTextView;
-
-    TextView mOperator2TextView;
 
     OperatorsEnum currentOperator;
 
@@ -30,110 +28,115 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+        fragmentTransaction.add(R.id.view_panel_container, mViewFragment);
+
+        fragmentTransaction.add(R.id.control_panel_container, mControlFragment);
+
+        fragmentTransaction.commit();
+
     }
 
     private void init() {
 
-        mOperand1TextView = (TextView) findViewById(R.id.backLine);
-        mOperatorTextView = (TextView) findViewById(R.id.operator);
-        mOperator2TextView = (TextView) findViewById(R.id.mainLine);
+        mViewFragment = new ViewFragment();
+        mControlFragment = new ControlFragment();
 
     }
 
 
-    public void processClickEvent(View view) {
 
-        int id = view.getId();
-
-        if (mOperator2TextView.getText().equals("0") && mOperator2TextView.getText().length() == 1 && id != R.id.decimalPoint && id != R.id.operation_equalTo)
-            mOperator2TextView.setText("");
+    @Override
+    public void onButtonClicked(int id) {
 
         switch (id) {
 
             case R.id.number_0:
-                if (!mOperator2TextView.getText().equals("0"))
-                    addValueToMainLine("0");
+                mViewFragment.addValueToOperand2("0");
                 break;
 
             case R.id.number_1:
-                addValueToMainLine("1");
+                mViewFragment.addValueToOperand2("1");
                 break;
 
             case R.id.number_2:
-                addValueToMainLine("2");
+                mViewFragment.addValueToOperand2("2");
                 break;
 
             case R.id.number_3:
-                addValueToMainLine("3");
+                mViewFragment.addValueToOperand2("3");
                 break;
 
             case R.id.number_4:
-                addValueToMainLine("4");
+                mViewFragment.addValueToOperand2("4");
                 break;
 
             case R.id.number_5:
-                addValueToMainLine("5");
+                mViewFragment.addValueToOperand2("5");
                 break;
 
             case R.id.number_6:
-                addValueToMainLine("6");
+                mViewFragment.addValueToOperand2("6");
                 break;
 
             case R.id.number_7:
-                addValueToMainLine("7");
+                mViewFragment.addValueToOperand2("7");
                 break;
 
             case R.id.number_8:
-                addValueToMainLine("8");
+                mViewFragment.addValueToOperand2("8");
                 break;
 
             case R.id.number_9:
-                addValueToMainLine("9");
+                mViewFragment.addValueToOperand2("9");
                 break;
 
             case R.id.decimalPoint:
-                if(!mOperator2TextView.getText().toString().contains(".")){
-                    addValueToMainLine(".");
-                }
+                mViewFragment.addDecimal();
                 break;
 
             case R.id.operation_add:
-                operatorClicked(OperatorsEnum.ADD);
+                mViewFragment.operatorClicked(MainActivity.OperatorsEnum.ADD);
                 break;
 
             case R.id.operation_subtract:
-                operatorClicked(OperatorsEnum.SUBTRACT);
+                mViewFragment.operatorClicked(MainActivity.OperatorsEnum.SUBTRACT);
                 break;
 
             case R.id.operation_multiply:
-                operatorClicked(OperatorsEnum.MULTIPLY);
+                mViewFragment.operatorClicked(MainActivity.OperatorsEnum.MULTIPLY);
                 break;
 
             case R.id.operation_division:
-                operatorClicked(OperatorsEnum.DIVISION);
+                mViewFragment.operatorClicked(MainActivity.OperatorsEnum.DIVISION);
                 break;
 
             case R.id.operation_modulo:
-                operatorClicked(OperatorsEnum.MODULO);
+                mViewFragment.operatorClicked(MainActivity.OperatorsEnum.MODULO);
                 break;
 
             case R.id.operation_delete:
-                deleteClicked();
+                mViewFragment.deleteClicked();
                 break;
 
             case R.id.operation_clear:
-                resetCalculator();
+                mViewFragment.resetCalculator();
                 break;
 
             case R.id.operation_equalTo:
-                initiateCalculation();
+               mViewFragment.initiateCalculation();
                 break;
 
         }
-
     }
 
-    private void addValueToMainLine(String pNumber) {
+
+/*
+    private void addValueToOperand2(String pNumber) {
 
         mOperator2TextView.setText((new StringBuilder(mOperator2TextView.getText()).append(pNumber)).toString());
 
@@ -141,8 +144,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetCalculator() {
 
-        mOperand1TextView.setText(" ");
-        mOperatorTextView.setText(" ");
+        mOperand1TV.setText(" ");
+        mOperatorTV.setText(" ");
         mOperator2TextView.setText(getResources().getText(R.string.default_value));
 
         decimalAdded = false;
@@ -150,64 +153,47 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void deleteClicked() {
 
-        if (mOperator2TextView.length() != 0) {
-
-            if (mOperator2TextView.getText().toString().substring(mOperator2TextView.length() - 1).equals(".")) {
-                decimalAdded = false;
-            }
-
-            mOperator2TextView.setText(mOperator2TextView.getText().toString().substring(0, mOperator2TextView.length() - 1));
-        }
-
-        if (mOperator2TextView.getText().length() == 0) {
-            mOperator2TextView.setText(getResources().getText(R.string.default_value));
-        }
-
-
-    }
-
-    private void operatorClicked(OperatorsEnum operator) {
+    private void mViewFragment.operatorClicked(OperatorsEnum operator) {
 
 
         if (operationPerformed) {
 
-            mOperand1TextView.setText(mOperator2TextView.getText().toString());
-            mOperatorTextView.setText(getOperator(operator));
+            mOperand1TV.setText(mOperator2TextView.getText().toString());
+            mOperatorTV.setText(getOperator(operator));
             mOperator2TextView.setText(getResources().getText(R.string.default_value));
             operationPerformed = false;
 
-//        } else if (mOperator2TextView.getText().toString().equals("0") || mOperator2TextView.getText().toString().equals("") &&  mOperand1TextView.getText().toString().equals("") || mOperand1TextView.getText().toString().equals(" ")) {
+//        } else if (getOperand2Value().equals("0") || getOperand2Value().equals("") &&  mOperand1TV.getText().toString().equals("") || mOperand1TV.getText().toString().equals(" ")) {
 //
-//            mOperand1TextView.setText("0");
-//            mOperatorTextView.setText(getOperator(operator));
-//            mOperator2TextView.setText(getResources().getText(R.string.default_value));
+//            mOperand1TV.setText("0");
+//            mOperatorTV.setText(getOperator(operator));
+//            mOperand2TV.setText(getResources().getText(R.string.default_value));
 //            operationPerformed = false;
 
         }
         else if(mOperator2TextView.getText().toString().equals("") && "+-".contains(getOperator(operator)) ){
-            addValueToMainLine(getOperator(operator));
+            addValueToOperand2(getOperator(operator));
         }
             else{
 
-//            if (mOperator2TextView.getText().toString().length() == 0 && mOperand1TextView.getText().toString().equals(" ") ) {
+//            if (getOperand2Value().length() == 0 && mOperand1TV.getText().toString().equals(" ") ) {
 //
 //                if(operator == OperatorsEnum.ADD || operator == OperatorsEnum.SUBTRACT)
-//                    addValueToMainLine(getOperator(operator));
+//                    addValueToOperand2(getOperator(operator));
 //
-//            } else if(mOperator2TextView.getText().toString().equals("+") || mOperator2TextView.getText().toString().equals("-")){
-//                mOperand1TextView.setText("0");
-//                mOperatorTextView.setText(getOperator(operator));
-//                mOperator2TextView.setText(getResources().getText(R.string.default_value));
+//            } else if(getOperand2Value().equals("+") || getOperand2Value().equals("-")){
+//                mOperand1TV.setText("0");
+//                mOperatorTV.setText(getOperator(operator));
+//                mOperand2TV.setText(getResources().getText(R.string.default_value));
 //                operationPerformed = false;
 //            }
 //            else {
 
-            mOperatorTextView.setText(getOperator(operator));
+            mOperatorTV.setText(getOperator(operator));
 
-            if (mOperand1TextView.getText().length() == 0 || mOperand1TextView.getText().toString().equals(" ")) {
-                mOperand1TextView.setText(mOperator2TextView.getText().toString());
+            if (mOperand1TV.getText().length() == 0 || mOperand1TV.getText().toString().equals(" ")) {
+                mOperand1TV.setText(mOperator2TextView.getText().toString());
                 mOperator2TextView.setText(getResources().getText(R.string.default_value));
                 decimalAdded = false;
             }
@@ -219,37 +205,16 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 
-    private String getOperator(OperatorsEnum operatorsEnum) {
-
-        switch (operatorsEnum) {
-
-            case ADD:
-                return "+";
-
-            case SUBTRACT:
-                return "-";
-
-            case MULTIPLY:
-                return "*";
-
-            case DIVISION:
-                return "/";
-
-            case MODULO:
-                return "%";
-        }
-        return null;
-    }
 
     private void initiateCalculation() {
 
         if(!operationPerformed){
 
-        if (mOperator2TextView.getText().toString().length() != 0 && mOperand1TextView.getText().toString().length() != 0 && !mOperand1TextView.getText().toString().equals(" ")) {
+        if (mOperator2TextView.getText().toString().length() != 0 && mOperand1TV.getText().toString().length() != 0 && !mOperand1TV.getText().toString().equals(" ")) {
 
-            double result = Calculator.calculate(mOperand1TextView.getText().toString(), mOperator2TextView.getText().toString(), currentOperator);
+            double result = Calculator.calculate(mOperand1TV.getText().toString(), mOperator2TextView.getText().toString(), currentOperator);
 
-            mOperatorTextView.setText((new StringBuilder(getOperator(currentOperator)).append(mOperator2TextView.getText().toString())).toString());
+            mOperatorTV.setText((new StringBuilder(getOperator(currentOperator)).append(mOperator2TextView.getText().toString())).toString());
 
             if (result % 1 == 0)
                 mOperator2TextView.setText(String.valueOf((int) result));
@@ -262,39 +227,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+*/
 
-
-    public static class ControlPanelFragment extends Fragment {
-
-        public ControlPanelFragment() {
-            // Required empty public constructor
-        }
-
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_control_panel, container, false);
-        }
-
-
-    }
-
-
-    public static class ViewPanelFragment extends Fragment {
-
-        public ViewPanelFragment() {
-            // Required empty public constructor
-        }
-
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-
-            return inflater.inflate(R.layout.fragment_view_panel, container, false);
-        }
-
-    }
 
 }

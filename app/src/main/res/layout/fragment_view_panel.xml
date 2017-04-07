@@ -7,7 +7,7 @@
     tools:context="io.full.calculator.MainActivity">
 
     <TextView
-        android:id="@+id/backLine"
+        android:id="@+id/operand1Line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="2342"
@@ -16,7 +16,7 @@
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/operator"
+        android:id="@+id/operatorLine"
         tools:text="+"
         android:maxLength="15"
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
         android:textSize="34sp" />
 
     <TextView
-        android:id="@+id/mainLine"
+        android:id="@+id/operand2Line"
         android:layout_marginBottom="30dp"
         android:maxLength="15"
         android:text="@string/default_value"

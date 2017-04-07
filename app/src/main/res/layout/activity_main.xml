@@ -6,20 +6,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="io.full.calculator.MainActivity">
-
+<!--
     <fragment
-        android:id="@+id/viewPanel"
+        android:id="@+id/view_panel_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:name="io.full.calculator.MainActivity$ViewPanelFragment"
+        android:name="io.full.calculator.ViewFragment"
         tools:layout="@layout/fragment_view_panel" />
 
     <fragment
-        android:id="@+id/buttonPanel"
+        android:id="@+id/control_panel_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:name="io.full.calculator.MainActivity$ControlPanelFragment"
-        tools:layout="@layout/fragment_control_panel" />
+        android:name="io.full.calculator.ControlFragment"
+        tools:layout="@layout/fragment_control_panel" />-->
+
+    <FrameLayout
+        android:id="@+id/view_panel_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <FrameLayout
+        android:id="@+id/control_panel_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        />
 </LinearLayout>
