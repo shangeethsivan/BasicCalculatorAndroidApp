@@ -24,15 +24,15 @@ public class MainActivity extends AppCompatActivity implements ControlFragment.O
 
         init();
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentManager lFragmentManager = getFragmentManager();
+        FragmentTransaction lFragmentTransaction = lFragmentManager.beginTransaction();
 
 
-        fragmentTransaction.add(R.id.view_panel_container, mViewFragment);
+        lFragmentTransaction.add(R.id.view_panel_container, mViewFragment);
 
-        fragmentTransaction.add(R.id.control_panel_container, mControlFragment);
+        lFragmentTransaction.add(R.id.control_panel_container, mControlFragment);
 
-        fragmentTransaction.commit();
+        lFragmentTransaction.commit();
 
     }
 
@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity implements ControlFragment.O
 
 
     @Override
-    public void onButtonClicked(int id) {
+    public void onButtonClicked(int pId) {
 
-        switch (id) {
+        switch (pId) {
 
             case R.id.number_0:
                 mViewFragment.addValueToOperand2("0");

@@ -6,9 +6,9 @@ package io.full.calculator;
 
 public class Calculator {
 
-    public static double calculate(double pValue1, double pValue2, MainActivity.OperatorsEnum operator) {
+    public static double calculate(double pValue1, double pValue2, MainActivity.OperatorsEnum pOperator) {
 
-        switch (operator) {
+        switch (pOperator) {
             case ADD:
                 return pValue1 + pValue2;
 

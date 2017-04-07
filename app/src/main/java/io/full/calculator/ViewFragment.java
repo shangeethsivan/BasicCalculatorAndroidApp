@@ -38,23 +38,24 @@ public class ViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_view_panel, container, false);
+        View lRootView = inflater.inflate(R.layout.fragment_view_panel, container, false);
 
-        init(view);
+        init(lRootView);
 
-        return view;
+        return lRootView;
 
     }
 
-    public void init(View v) {
+    public void init(View pView) {
 
-        mOperand1TV = (TextView) v.findViewById(R.id.operand1Line);
+        mOperand1TV = (TextView) pView.findViewById(R.id.operand1Line);
 
-        mOperand2TV = (TextView) v.findViewById(R.id.operand2Line);
+        mOperand2TV = (TextView) pView.findViewById(R.id.operand2Line);
 
-        mOperatorTV = (TextView) v.findViewById(R.id.operatorLine);
+        mOperatorTV = (TextView) pView.findViewById(R.id.operatorLine);
 
         resetCalculator();
+
     }
 
 
@@ -65,10 +66,17 @@ public class ViewFragment extends Fragment {
             mEqualToPressed = false;
         }
 
-        if (getOperand2Value().equals("0"))
+        if (getOperand2Value().equals("0") && pValue.equals("0"))
+            return;
+
+        if (getOperand2Value().equals(""))
             mOperand2TV.setText(pValue);
-        else
-            mOperand2TV.setText((new StringBuilder(getOperand2Value()).append(pValue)).toString());
+        else{
+            if(!getOperand2Value().equals("0"))
+                mOperand2TV.setText((new StringBuilder(getOperand2Value()).append(pValue)).toString());
+            else
+                mOperand2TV.setText(pValue);
+        }
 
     }
 
@@ -89,14 +97,16 @@ public class ViewFragment extends Fragment {
 
         Double lDoubleValue = Double.valueOf(pStringValue);
 
-        if (lDoubleValue % 1 == 0){
+        if (lDoubleValue % 1 == 0) {
 
-            DecimalFormat df = new DecimalFormat("###.#");
-            return df.format(lDoubleValue);
+            DecimalFormat lDecFormat = new DecimalFormat("###.#");
+            return lDecFormat.format(lDoubleValue);
 
+        } else
+        {
+            DecimalFormat lDecFormat = new DecimalFormat("###.##########");
+            return lDecFormat.format(lDoubleValue);
         }
-        else
-            return String.valueOf(lDoubleValue);
     }
 
 
@@ -112,70 +122,80 @@ public class ViewFragment extends Fragment {
 
         mOperand1TV.setText("");
         mOperatorTV.setText("");
-        mOperand2TV.setText(getResources().getText(R.string.default_value).toString());
+        mOperand2TV.setText(getResources().getText(R.string.default_value));
+
         mEqualToPressed = false;
     }
 
 
     public void deleteClicked() {
 
-        if (mOperand2TV.length() != 0)
-            mOperand2TV.setText(getOperand2Value().substring(0, mOperand2TV.length() - 1));
+        if (!mEqualToPressed) {
 
+            if (mOperand2TV.length() != 0)
+                mOperand2TV.setText(getOperand2Value().substring(0, mOperand2TV.length() - 1));
 
-        if (getOperand2Value().length() == 0)
-            mOperand2TV.setText(getResources().getText(R.string.default_value));
+            if (getOperand2Value().length() == 0)
+                mOperand2TV.setText(getResources().getText(R.string.default_value));
 
-
+        }
     }
 
 
-    public void operatorClicked(MainActivity.OperatorsEnum operator) {
+    public void operatorClicked(MainActivity.OperatorsEnum pOperator) {
 
-        if (mEqualToPressed) {
+        if(pOperator == MainActivity.OperatorsEnum.SUBTRACT && getOperand2Value().equals("")){
 
-            resetCalculator();
+            mOperand1TV.setText("0");
+            mOperatorTV.setText(getOperator(pOperator));
+            mOperand2TV.setText("");
+            mCurrentOperator = pOperator;
 
-            mOperand1 = mResult;
-            mOperatorTV.setText(getOperator(operator));
-            mCurrentOperator = operator;
-            mOperand1TV.setText(getDoubleValue(String.valueOf(mResult)));
+        }
+        if (!getOperand2Value().equals("")) {
+            if (mEqualToPressed) {
 
-            mEqualToPressed = false;
+                resetCalculator();
 
-        } else {
+                mOperand1 = mResult;
+                mOperatorTV.setText(getOperator(pOperator));
+                mCurrentOperator = pOperator;
+                mOperand1TV.setText(getDoubleValue(String.valueOf(mResult)));
 
-            if (!getOperand1Value().equals("")) {
-                mOperand1 = Double.valueOf(getOperand1Value());
-            }
-
-            mOperand2 = Double.valueOf(getOperand2Value());
-
-            if(mCurrentOperator!=null)
-                mResult = Calculator.calculate(mOperand1, mOperand2, mCurrentOperator);
-            else
-                mResult = Calculator.calculate(mOperand1, mOperand2, operator);
-
-// TODO: Check it
-
-            mCurrentOperator = operator;
-
-            if (getOperand1Value().equals("")) {
-                mOperand1TV.setText(getDoubleValue(String.valueOf(mOperand2)));
+                mEqualToPressed = false;
 
             } else {
-                mOperand1TV.setText(getDoubleValue(String.valueOf(mResult)));
-            }
 
-            mOperatorTV.setText(getOperator(operator));
-            mOperand2TV.setText(getResources().getText(R.string.default_value));
+                if (!getOperand1Value().equals("")) {
+                    mOperand1 = Double.valueOf(getOperand1Value());
+                }
+
+                mOperand2 = Double.valueOf(getOperand2Value());
+
+                if (mCurrentOperator != null)
+                    mResult = Calculator.calculate(mOperand1, mOperand2, mCurrentOperator);
+                else
+                    mResult = Calculator.calculate(mOperand1, mOperand2, pOperator);
+
+                mCurrentOperator = pOperator;
+
+                if (getOperand1Value().equals("")) {
+                    mOperand1TV.setText(getDoubleValue(String.valueOf(mOperand2)));
+
+                } else {
+                    mOperand1TV.setText(getDoubleValue(String.valueOf(mResult)));
+                }
+
+                mOperatorTV.setText(getOperator(pOperator));
+                mOperand2TV.setText(getResources().getText(R.string.default_value));
+            }
         }
     }
 
 
     public void initiateCalculation() {
 
-        if(mCurrentOperator!=null) {
+        if (mCurrentOperator != null && !getOperand2Value().equals("")) {
 
             if (!mEqualToPressed) {
 
