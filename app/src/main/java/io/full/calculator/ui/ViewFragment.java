@@ -111,7 +111,7 @@ public class ViewFragment extends Fragment {
 
         mOperand1TV.setText("");
         mOperatorTV.setText("");
-        mOperand2TV.setText(getResources().getText(R.string.default_value));
+        mOperand2TV.setText("");
 
         mEqualToPressed = false;
     }
