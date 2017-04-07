@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements ControlFragment.O
                 break;
 
             case R.id.plus_or_minus:
+                mViewFragment.posNegClicked();
                 break;
 
         }

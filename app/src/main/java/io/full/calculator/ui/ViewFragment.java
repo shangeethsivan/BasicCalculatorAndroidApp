@@ -52,6 +52,11 @@ public class ViewFragment extends Fragment {
 
     public void init(View pView) {
 
+        mOperand2 = 0;
+        mOperand1 = 0;
+
+        mEqualToPressed = false;
+
         mUtilObject = new Util();
 
         mOperand1TV = (TextView) pView.findViewById(R.id.operand1Line);
@@ -60,7 +65,7 @@ public class ViewFragment extends Fragment {
 
         mOperatorTV = (TextView) pView.findViewById(R.id.operatorLine);
 
-        resetCalculator();
+//        resetCalculator();
 
     }
 
@@ -106,14 +111,10 @@ public class ViewFragment extends Fragment {
 
     public void resetCalculator() {
 
-        mOperand2 = 0;
-        mOperand1 = 0;
-
         mOperand1TV.setText("");
         mOperatorTV.setText("");
         mOperand2TV.setText("");
 
-        mEqualToPressed = false;
     }
 
 
@@ -133,14 +134,16 @@ public class ViewFragment extends Fragment {
 
     public void operatorClicked(MainActivity.OperatorsEnum pOperator) {
 
-        if (pOperator == MainActivity.OperatorsEnum.SUBTRACT && getOperand1Value().equals("") && getOperand2Value().equals("")) {
+//        if (pOperator == MainActivity.OperatorsEnum.SUBTRACT && getOperand1Value().equals("") && getOperand2Value().equals("")) {
+//
+//            mOperand1TV.setText("0");
+//            mOperatorTV.setText(mUtilObject.getOperatorSymbolAsString(pOperator));
+//            mOperand2TV.setText("");
+//            mCurrentOperator = pOperator;
+//
+//        } else
+        if (!getOperand2Value().equals("")) {
 
-            mOperand1TV.setText("0");
-            mOperatorTV.setText(mUtilObject.getOperatorSymbolAsString(pOperator));
-            mOperand2TV.setText("");
-            mCurrentOperator = pOperator;
-
-        } else if (!getOperand2Value().equals("")) {
             if (mEqualToPressed) {
 
                 resetCalculator();
@@ -184,6 +187,17 @@ public class ViewFragment extends Fragment {
         }
     }
 
+    public void posNegClicked() {
+
+        if (!mEqualToPressed) {
+            if (!getOperand2Value().contains("-"))
+                mOperand2TV.setText(new StringBuilder("-").append(getOperand2Value()));
+            else if (getOperand2Value().contains("-"))
+                mOperand2TV.setText(getOperand2Value().substring(1));
+        }
+
+    }
+
 
     public void initiateCalculation() {
 
@@ -201,8 +215,16 @@ public class ViewFragment extends Fragment {
 
                 mResult = Calculator.calculate(mOperand1, mOperand2, mCurrentOperator);
 
-                mOperatorTV.setText((new StringBuilder(mUtilObject.getOperatorSymbolAsString(mCurrentOperator))
-                        .append(mUtilObject.formatDoubleValue(String.valueOf(mOperand2)))).toString());
+                if("+-*/%".contains(String.valueOf(mOperand2).substring(0,1))){
+
+                    mOperatorTV.setText((new StringBuilder(mUtilObject.getOperatorSymbolAsString(mCurrentOperator))
+                            .append("(")
+                            .append(mUtilObject.formatDoubleValue(String.valueOf(mOperand2)))
+                            .append(")")).toString());
+                }else{
+                    mOperatorTV.setText((new StringBuilder(mUtilObject.getOperatorSymbolAsString(mCurrentOperator))
+                            .append(mUtilObject.formatDoubleValue(String.valueOf(mOperand2)))).toString());
+                }
 
                 mOperand2TV.setText(mUtilObject.formatDoubleValue(String.valueOf(mResult)));
 
