@@ -3,8 +3,6 @@ package io.full.calculator;
 
 import android.os.Bundle;
 import android.app.Fragment;
-import android.renderscript.Double2;
-import android.support.annotation.IntegerRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +28,7 @@ public class ViewFragment extends Fragment {
     MainActivity.OperatorsEnum mCurrentOperator;
 
     public ViewFragment() {
+
         // Required empty public constructor
 
     }
@@ -90,11 +89,16 @@ public class ViewFragment extends Fragment {
 
         Double lDoubleValue = Double.valueOf(pStringValue);
 
-        if (lDoubleValue % 1 == 0)
-            return String.valueOf(lDoubleValue.intValue());
+        if (lDoubleValue % 1 == 0){
+
+            DecimalFormat df = new DecimalFormat("###.#");
+            return df.format(lDoubleValue);
+
+        }
         else
             return String.valueOf(lDoubleValue);
     }
+
 
     public String getOperand1Value() {
         return mOperand1TV.getText().toString();
@@ -106,16 +110,10 @@ public class ViewFragment extends Fragment {
         mOperand2 = 0;
         mOperand1 = 0;
 
-//        mOperand1TV.setText(String.valueOf("").toString().trim());
-//        mOperatorTV.setText(String.valueOf("").toString().trim());
-
-//        mOperatorTV.setText(getResources().getText(R.string.empty_string).toString());
-//        mOperand1TV.setText(getResources().getText(R.string.empty_string).toString());
-
         mOperand1TV.setText("");
         mOperatorTV.setText("");
         mOperand2TV.setText(getResources().getText(R.string.default_value).toString());
-
+        mEqualToPressed = false;
     }
 
 
@@ -130,68 +128,70 @@ public class ViewFragment extends Fragment {
 
 
     }
-/*
-    public void initiateCalculation() {
 
-//        if(!operationPerformed){
-
-            if (getOperand2Value().length() != 0 && mOperand1TV.getText().toString().length() != 0 && !mOperand1TV.getText().toString().equals(" ")) {
-
-                double result = Calculator.calculate(getOperand1Value(), getOperand2Value(), currentOperator);
-
-                mOperatorTV.setText((new StringBuilder(getOperator(currentOperator)).append(mOperator2TextView.getText().toString())).toString());
-
-                if (result % 1 == 0)
-                    mOperand2TV.setText(String.valueOf((int) result));
-                else {
-                    mOperand2TV.setText(String.valueOf(result));
-
-                }
-//
-//                operationPerformed = true;
-//            }
-        }
-    }
-    */
 
     public void operatorClicked(MainActivity.OperatorsEnum operator) {
 
-        mCurrentOperator = operator;
+        if (mEqualToPressed) {
 
-        if (!getOperand1Value().equals("")) {
-            mOperand1 = Double.valueOf(getOperand1Value());
-        }
+            resetCalculator();
 
-        mOperand2 = Double.valueOf(getOperand2Value());
-
-        mResult = Calculator.calculate(mOperand1, mOperand2, operator);
-
-        if(getOperand1Value().equals("")) {
-            mOperand1TV.setText(getDoubleValue(String.valueOf(mOperand2)));
-
-        }else{
+            mOperand1 = mResult;
+            mOperatorTV.setText(getOperator(operator));
+            mCurrentOperator = operator;
             mOperand1TV.setText(getDoubleValue(String.valueOf(mResult)));
-        }
 
-        mOperatorTV.setText(getOperator(operator));
-        mOperand2TV.setText(getResources().getText(R.string.default_value));
+            mEqualToPressed = false;
 
-    }
+        } else {
 
-    public void initiateCalculation() {
-
-        if (!mEqualToPressed) {
-            if (getOperand1Value().length() != 0)
+            if (!getOperand1Value().equals("")) {
                 mOperand1 = Double.valueOf(getOperand1Value());
+            }
 
             mOperand2 = Double.valueOf(getOperand2Value());
 
-            mResult = Calculator.calculate(mOperand1, mOperand2, mCurrentOperator);
+            if(mCurrentOperator!=null)
+                mResult = Calculator.calculate(mOperand1, mOperand2, mCurrentOperator);
+            else
+                mResult = Calculator.calculate(mOperand1, mOperand2, operator);
 
-            mOperatorTV.setText(getOperator(mCurrentOperator) + getOperand2Value());
-            mOperand2TV.setText(getDoubleValue(String.valueOf(mResult)));
+// TODO: Check it
 
-            mEqualToPressed = true;
+            mCurrentOperator = operator;
+
+            if (getOperand1Value().equals("")) {
+                mOperand1TV.setText(getDoubleValue(String.valueOf(mOperand2)));
+
+            } else {
+                mOperand1TV.setText(getDoubleValue(String.valueOf(mResult)));
+            }
+
+            mOperatorTV.setText(getOperator(operator));
+            mOperand2TV.setText(getResources().getText(R.string.default_value));
+        }
+    }
+
+
+    public void initiateCalculation() {
+
+        if(mCurrentOperator!=null) {
+
+            if (!mEqualToPressed) {
+
+                if (getOperand1Value().length() != 0)
+                    mOperand1 = Double.valueOf(getOperand1Value());
+
+                mOperand2 = Double.valueOf(getOperand2Value());
+
+                mResult = Calculator.calculate(mOperand1, mOperand2, mCurrentOperator);
+
+                mOperatorTV.setText(getOperator(mCurrentOperator) + getOperand2Value());
+                mOperand2TV.setText(getDoubleValue(String.valueOf(mResult)));
+
+                mEqualToPressed = true;
+                mCurrentOperator = null;
+            }
         }
     }
 

@@ -309,13 +309,14 @@
 
 
         <TextView
-            android:id="@+id/decimalPoint"
+            android:id="@+id/plus_or_minus"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:visibility="invisible"
             android:background="@drawable/button_shape"
             android:gravity="center"
-            android:text="."
+            android:text="+/-"
             android:textSize="34sp" />
 
         <View
@@ -339,16 +340,16 @@
             android:layout_height="wrap_content"
             android:background="@android:color/darker_gray" />
 
+
         <TextView
-            android:id="@+id/plus_or_minus"
+            android:id="@+id/decimalPoint"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/button_shape"
             android:gravity="center"
-            android:text="+/-"
+            android:text="."
             android:textSize="34sp" />
-
 
         <View
             android:layout_width="1dp"
