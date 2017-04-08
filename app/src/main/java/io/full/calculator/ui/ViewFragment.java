@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import io.full.calculator.R;
 import io.full.calculator.util.Calculator;
@@ -134,14 +135,6 @@ public class ViewFragment extends Fragment {
 
     public void operatorClicked(MainActivity.OperatorsEnum pOperator) {
 
-//        if (pOperator == MainActivity.OperatorsEnum.SUBTRACT && getOperand1Value().equals("") && getOperand2Value().equals("")) {
-//
-//            mOperand1TV.setText("0");
-//            mOperatorTV.setText(mUtilObject.getOperatorSymbolAsString(pOperator));
-//            mOperand2TV.setText("");
-//            mCurrentOperator = pOperator;
-//
-//        } else
         if (!getOperand2Value().equals("")) {
 
             if (mEqualToPressed) {
@@ -158,10 +151,14 @@ public class ViewFragment extends Fragment {
             } else {
 
                 if (!getOperand1Value().equals("")) {
-                    mOperand1 = Double.valueOf(getOperand1Value());
+                    mOperand1 = convertToDouble(getOperand2Value());
                 }
 
-                mOperand2 = Double.valueOf(getOperand2Value());
+                mOperand2 = convertToDouble(getOperand2Value());
+
+                if(Double.isNaN(mOperand2)){
+                    return;
+                }
 
                 if (mCurrentOperator != null)
                     mResult = Calculator.calculate(mOperand1, mOperand2, mCurrentOperator);
@@ -208,8 +205,13 @@ public class ViewFragment extends Fragment {
                 if (getOperand1Value().length() != 0)
                     mOperand1 = Double.valueOf(getOperand1Value());
 
-                if (!getOperand2Value().equals(""))
-                    mOperand2 = Double.valueOf(getOperand2Value());
+                if (!getOperand2Value().equals("")) {
+                    mOperand2 = convertToDouble(getOperand2Value());
+
+                    if(Double.isNaN(mOperand2)){
+                        return;
+                    }
+                }
                 else
                     mOperand2 = 0;
 
@@ -232,6 +234,23 @@ public class ViewFragment extends Fragment {
                 mCurrentOperator = null;
             }
         }
+    }
+
+    public double convertToDouble(String number){
+
+        double lConvertedValue ;
+
+        try{
+            lConvertedValue = Double.valueOf(number);
+        }
+        catch (NumberFormatException e){
+
+            Toast.makeText(getActivity(), "Enter a valid Number", Toast.LENGTH_SHORT).show();
+            mOperand2TV.setText("");
+
+            return Double.NaN;
+        }
+        return lConvertedValue;
     }
 
 
