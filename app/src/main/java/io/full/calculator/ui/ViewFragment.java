@@ -151,7 +151,7 @@ public class ViewFragment extends Fragment {
             } else {
 
                 if (!getOperand1Value().equals("")) {
-                    mOperand1 = convertToDouble(getOperand2Value());
+                    mOperand1 = convertToDouble(getOperand1Value());
                 }
 
                 mOperand2 = convertToDouble(getOperand2Value());
