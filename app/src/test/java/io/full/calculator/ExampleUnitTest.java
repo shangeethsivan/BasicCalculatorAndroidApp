@@ -8,6 +8,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import io.full.calculator.ui.MainActivity;
@@ -25,29 +26,33 @@ public class ExampleUnitTest {
 
     private double d1;
     private double d2;
+    private double d3;
+
+    public ExampleUnitTest(double[] d) {
+        this.d1 = d[0];
+        this.d2 = d[1];
+        this.d3 = d[2];
+    }
 
     @Parameters
-    public static List<double[]> testConditions() {
+    public static Collection<double[]> testConditions() {
 
         double expectedOutputs[][] = {
-                {-1.0, Calculator.calculate(1, -2, MainActivity.OperatorsEnum.ADD)},
-                {5.0, Calculator.calculate(2, 3, MainActivity.OperatorsEnum.ADD)},
-                {2.0, Calculator.calculate(1, 1, MainActivity.OperatorsEnum.ADD)},
-                {11.0, Calculator.calculate(5, 6, MainActivity.OperatorsEnum.ADD)}
+                {-1.0, 1,-2},
+                {5.0, 2,3},
+                {2.0, 1,1},
+                {11.0, 5,6}
         };
 
         return Arrays.asList(expectedOutputs);
     }
 
-    public ExampleUnitTest(double d1, double d2) {
-        this.d1 = d1;
-        this.d2 = d2;
-    }
 
 
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(d1, d2,0.01);
+        assertEquals(d1, Calculator.calculate(d2, d3, MainActivity.OperatorsEnum.ADD),0.01);
+
     }
 
 }
